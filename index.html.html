@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>體育專業高中生升大學科系診斷器</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            950: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+        }
+        /* Custom scrollbar for slate theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-blue-600 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800/80 backdrop-blur-md sticky top-0 z-50 bg-slate-950/80">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-blue-600 to-cyan-500 p-2.5 rounded-xl shadow-lg shadow-blue-500/20">
+                    <!-- Custom Athletic/Academic SVG Icon -->
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 21v-6a2 2 0 012-2h2a2 2 0 012 2v6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-slate-100 to-slate-300">
+                        體育生升學導航
+                    </h1>
+                    <p class="text-xs text-slate-400">體育專業高中生升大學科系診斷器</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span id="api-status-badge" class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+                    <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    本地智能引擎啟動
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 py-8 md:py-12">
+        
+        <!-- Hero Intro Section -->
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-3xl md:text-5xl font-black mb-4 tracking-tight leading-tight text-white">
+                打破「運動員只能讀體育系」的迷思
+            </h2>
+            <p class="text-slate-300 text-base md:text-lg leading-relaxed">
+                結合你在運動賽場上的精湛專項，以及你內心真正的興趣，
+                精準對接台灣大專院校多元學術領域，為你開闢最適合的雙軌升學藍圖！
+            </p>
+            
+            <!-- Quick Scenarios (範本一鍵載入) -->
+            <div class="mt-8">
+                <p class="text-xs text-slate-400 uppercase tracking-widest mb-3 font-semibold">快速測試情境範本</p>
+                <div class="flex flex-wrap justify-center gap-2.5">
+                    <button type="button" onclick="loadScenario('badminton')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/50 hover:border-slate-600 transition-all">
+                        🏸 羽球選手 + 想要教學 + 心理與諮商
+                    </button>
+                    <button type="button" onclick="loadScenario('track')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/50 hover:border-slate-600 transition-all">
+                        🏃‍♂️ 田徑選手 + 不想教學 + 商業行銷與活動
+                    </button>
+                    <button type="button" onclick="loadScenario('swimming')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/50 hover:border-slate-600 transition-all">
+                        🏊 游泳選手 + 還在猶豫 + 醫療防護與解剖學
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Input Form Section (Left / Full on Mobile) -->
+            <section class="lg:col-span-5 bg-slate-900/60 border border-slate-800 rounded-2xl p-6 md:p-8 backdrop-blur-md shadow-2xl relative overflow-hidden">
+                <!-- Decorative gradient glow behind form -->
+                <div class="absolute -top-10 -left-10 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                
+                <h3 class="text-xl font-bold mb-6 text-white flex items-center">
+                    <svg class="w-5 h-5 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    填寫你的升學條件
+                </h3>
+
+                <form id="diagnostic-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                    
+                    <!-- Input 1: Specialty (我的專項) -->
+                    <div class="space-y-2">
+                        <label for="specialty" class="block text-sm font-semibold text-slate-200">
+                            1. 我的運動專項
+                        </label>
+                        <div class="relative">
+                            <input type="text" id="specialty" required placeholder="例如：田徑、籃球、羽球、游泳..." 
+                                class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        </div>
+                        <!-- Suggestion chips for specialty -->
+                        <div class="flex flex-wrap gap-1.5 mt-2">
+                            <span onclick="setSpecialty('田徑')" class="cursor-pointer text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors">田徑</span>
+                            <span onclick="setSpecialty('籃球')" class="cursor-pointer text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors">籃球</span>
+                            <span onclick="setSpecialty('羽球')" class="cursor-pointer text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors">羽球</span>
+                            <span onclick="setSpecialty('游泳')" class="cursor-pointer text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors">游泳</span>
+                            <span onclick="setSpecialty('跆拳道')" class="cursor-pointer text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors">跆拳道</span>
+                            <span onclick="setSpecialty('棒球')" class="cursor-pointer text-[11px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition-colors">棒球</span>
+                        </div>
+                    </div>
+
+                    <!-- Input 2: Future teaching preference (未來是否想培育新生代同樣的專項) -->
+                    <div class="space-y-2">
+                        <label class="block text-sm font-semibold text-slate-200">
+                            2. 未來是否想培育新生代同樣的專項？
+                        </label>
+                        <p class="text-xs text-slate-400 mb-2">這會決定你是否適合修讀師資培育、專業教練研究所或教程課程。</p>
+                        
+                        <div class="space-y-2.5">
+                            <label class="flex items-start p-3 bg-slate-950/40 hover:bg-slate-950/80 border border-slate-800 hover:border-slate-700 rounded-xl cursor-pointer transition-all">
+                                <input type="radio" name="teach_preference" value="yes" checked class="mt-1 text-blue-600 focus:ring-blue-500 focus:ring-offset-slate-900">
+                                <div class="ml-3">
+                                    <span class="block text-sm font-medium text-slate-200">是的，想成為體育教師或專業教練</span>
+                                    <span class="block text-xs text-slate-400">專注於技術傳承、基層體育培育與戰術指導。</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start p-3 bg-slate-950/40 hover:bg-slate-950/80 border border-slate-800 hover:border-slate-700 rounded-xl cursor-pointer transition-all">
+                                <input type="radio" name="teach_preference" value="no" class="mt-1 text-blue-600 focus:ring-blue-500 focus:ring-offset-slate-900">
+                                <div class="ml-3">
+                                    <span class="block text-sm font-medium text-slate-200">不想，想拓展其他與運動無關或跨界的專長</span>
+                                    <span class="block text-xs text-slate-400">例如商業經營、媒體公關、防護與復健科學。</span>
+                                </div>
+                            </label>
+
+                            <label class="flex items-start p-3 bg-slate-950/40 hover:bg-slate-950/80 border border-slate-800 hover:border-slate-700 rounded-xl cursor-pointer transition-all">
+                                <input type="radio" name="teach_preference" value="maybe" class="mt-1 text-blue-600 focus:ring-blue-500 focus:ring-offset-slate-900">
+                                <div class="ml-3">
+                                    <span class="block text-sm font-medium text-slate-200">還在考慮，但希望能保有多樣化的選擇彈性</span>
+                                    <span class="block text-xs text-slate-400">一邊維持專項訓練，一邊多方探索其他科系。</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Input 3: Special Interests (我特別感興趣的事物) -->
+                    <div class="space-y-2">
+                        <label for="interests" class="block text-sm font-semibold text-slate-200">
+                            3. 我特別感興趣的事物
+                        </label>
+                        <p class="text-xs text-slate-400 mb-2">可以多選下方的興趣標籤，或直接在輸入框中補充。</p>
+                        
+                        <!-- Interative Interest Tags -->
+                        <div class="flex flex-wrap gap-2 mb-3" id="interest-tags-container">
+                            <!-- JS will populate interactive togglable tags -->
+                        </div>
+
+                        <textarea id="interests" required rows="3" placeholder="例如：我對人體構造有興趣、想了解如何辦運動賽事、喜歡寫程式或玩電競分析、對心理輔導很有興趣..." 
+                            class="w-full bg-slate-950/80 border border-slate-700 rounded-xl px-4 py-3 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submit-btn" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white font-bold tracking-wide shadow-lg hover:shadow-blue-500/25 transition-all duration-300 flex items-center justify-center space-x-2 border border-blue-500/30">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                        <span>送出學科系診斷</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Results Panel / Empty State / Loading State (Right / Full on Mobile) -->
+            <section class="lg:col-span-7 space-y-6">
+                
+                <!-- 1. EMPTY STATE (Default) -->
+                <div id="result-empty-state" class="h-full min-h-[500px] flex flex-col items-center justify-center bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-8 text-center">
+                    <div class="w-20 h-20 bg-slate-800/60 rounded-full flex items-center justify-center text-slate-400 mb-6 border border-slate-700/50">
+                        <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-200 mb-2">準備好開啟你的升學新視野嗎？</h4>
+                    <p class="text-sm text-slate-400 max-w-md leading-relaxed">
+                        在左側輸入你的體育專項、教學意願與感興趣的學術領域，點擊「送出診斷」即可獲得專屬於你的大專院校升學分析報告。
+                    </p>
+                </div>
+
+                <!-- 2. LOADING STATE (Hidden by default) -->
+                <div id="result-loading-state" class="hidden h-full min-h-[500px] flex flex-col items-center justify-center bg-slate-900/60 border border-slate-800 rounded-2xl p-8 text-center relative overflow-hidden">
+                    <div class="absolute inset-0 bg-slate-950/10 pointer-events-none animate-pulse"></div>
+                    
+                    <!-- Pulsing dynamic loader -->
+                    <div class="relative w-24 h-24 mb-8">
+                        <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
+                        <div class="absolute inset-0 rounded-full border-4 border-t-blue-500 border-r-indigo-500 animate-spin"></div>
+                        <div class="absolute inset-4 rounded-full bg-slate-950 flex items-center justify-center text-blue-400">
+                            <svg class="w-8 h-8 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <h4 class="text-xl font-bold text-white mb-2" id="loading-title">正在啟動大數據與 AI 雙軌診斷...</h4>
+                    <p class="text-sm text-slate-400 max-w-sm" id="loading-subtitle">
+                        正在比對全國大專院校 130 餘種體育與跨領域科系招生管道...
+                    </p>
+
+                    <!-- Pseudo-progress steps -->
+                    <div class="mt-8 space-y-2 w-64 text-left">
+                        <div class="flex items-center space-x-2 text-xs" id="step-1">
+                            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                            <span class="text-slate-300">分析體育專項核心優勢...</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs" id="step-2">
+                            <span class="w-2 h-2 rounded-full bg-slate-700"></span>
+                            <span class="text-slate-500">篩選體育培育與非體育跨領域科系...</span>
+                        </div>
+                        <div class="flex items-center space-x-2 text-xs" id="step-3">
+                            <span class="w-2 h-2 rounded-full bg-slate-700"></span>
+                            <span class="text-slate-500">生成高中學習歷程與自傳準備方針...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. DIAGNOSIS RESULTS (Hidden by default) -->
+                <div id="result-success-state" class="hidden space-y-6">
+                    
+                    <!-- Result Header Banner Card -->
+                    <div class="bg-gradient-to-r from-blue-950/80 to-slate-900/90 border border-blue-900/40 rounded-2xl p-6 relative overflow-hidden shadow-xl">
+                        <div class="absolute top-0 right-0 p-3 bg-blue-500/10 rounded-bl-xl text-blue-400 text-xs font-semibold" id="result-badge">
+                            AI 升學診斷模式
+                        </div>
+                        <p class="text-xs text-blue-400 font-bold tracking-wider uppercase mb-1">診斷報告已生成</p>
+                        <h3 class="text-2xl font-black text-white" id="results-title-header">
+                            羽球專項 × 運動心理跨域雙軌藍圖
+                        </h3>
+                        <p class="text-slate-300 text-sm mt-2 leading-relaxed" id="overall-analysis-text">
+                            根據你的羽球背景與對心理健康的強烈熱情，你非常適合以「雙向推進」的方式升學，同時在運動醫學或心理學學門進行深造。
+                        </p>
+                    </div>
+
+                    <!-- Custom Navigation Tabs -->
+                    <div class="flex bg-slate-900/80 border border-slate-800 p-1.5 rounded-xl">
+                        <button onclick="switchTab('majors')" id="tab-btn-majors" class="flex-1 py-2.5 text-xs md:text-sm font-semibold rounded-lg text-center transition-all bg-blue-600 text-white shadow-md">
+                            推薦科系與校系
+                        </button>
+                        <button onclick="switchTab('careers')" id="tab-btn-careers" class="flex-1 py-2.5 text-xs md:text-sm font-semibold rounded-lg text-center transition-all text-slate-400 hover:text-slate-200">
+                            職涯藍圖與發展
+                        </button>
+                        <button onclick="switchTab('portfolio')" id="tab-btn-portfolio" class="flex-1 py-2.5 text-xs md:text-sm font-semibold rounded-lg text-center transition-all text-slate-400 hover:text-slate-200">
+                            高中學習歷程建議
+                        </button>
+                    </div>
+
+                    <!-- TAB 1: RECOMMENDED MAJORS -->
+                    <div id="tab-content-majors" class="space-y-4">
+                        <!-- Dynamic Major Cards go here -->
+                    </div>
+
+                    <!-- TAB 2: CAREER PATHS -->
+                    <div id="tab-content-careers" class="hidden bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 space-y-4">
+                        <h4 class="text-base font-bold text-white mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            畢業後多元出路藍圖
+                        </h4>
+                        <div id="careers-list" class="space-y-4">
+                            <!-- Dynamic Career Cards go here -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: PORTFOLIO / PREPARATION -->
+                    <div id="tab-content-portfolio" class="hidden bg-slate-900/40 border border-slate-800/80 rounded-2xl p-6 space-y-4">
+                        <h4 class="text-base font-bold text-white mb-2 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                            </svg>
+                            高中升學自主學習與學習歷程建議
+                        </h4>
+                        <div id="portfolio-list" class="space-y-3">
+                            <!-- Dynamic Portfolio tips go here -->
+                        </div>
+                    </div>
+
+                    <!-- Action panel for results -->
+                    <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                        <span class="text-xs text-slate-500">
+                            *本報告基於體育升學指標生成，亦支持多元入學（個人申請、獨立招生、甄審甄試等）。
+                        </span>
+                        <div class="flex space-x-2">
+                            <button onclick="window.print()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition-all flex items-center">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                                </svg>
+                                列印診斷報告
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Custom Floating Alert Modal -->
+    <div id="custom-alert" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
+            <div class="w-12 h-12 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center mb-4">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <h5 class="text-base font-bold text-white mb-2" id="alert-title">發生錯誤</h5>
+            <p class="text-xs text-slate-400 leading-relaxed mb-4" id="alert-message">請確認輸入資料正確無誤。</p>
+            <button onclick="closeAlert()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl text-xs font-semibold transition-all">
+                確認
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Area -->
+    <footer class="border-t border-slate-800 bg-slate-950/40 py-8">
+        <div class="max-w-6xl mx-auto px-4 text-center md:flex md:justify-between md:items-center space-y-4 md:space-y-0">
+            <div class="text-left">
+                <h5 class="text-sm font-bold text-slate-300">體育專業高中生升大學科系診斷器</h5>
+                <p class="text-xs text-slate-500 mt-1">
+                    適用管道：運動績優甄審、甄試、各校運動獨招、學測個人申請、繁星推薦。
+                </p>
+            </div>
+            <p class="text-xs text-slate-600">
+                &copy; 2026 體育專業生涯導航專案小組. All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JS Logic and Core Implementation -->
+    <script>
+        // Form field binding
+        const apiKey = ""; // Keep empty as instructed, runtime environment handles the injection
+
+        // Default Interactive Tags definition
+        const initialTags = [
+            { text: "運動防護與防貼扎", active: false },
+            { text: "健康休閒與高齡養生", active: false },
+            { text: "行銷傳播與賽事主辦", active: false },
+            { text: "心理諮商與心智鍛鍊", active: false },
+            { text: "AI科技與運動數據分析", active: false },
+            { text: "幼兒體適能與特殊體育", active: false },
+            { text: "戶外冒險與極限運動", active: false },
+            { text: "企業管理與商務開拓", active: false }
+        ];
+
+        let tagsState = [...initialTags];
+
+        // Scenarios mapped for fast population
+        const scenarios = {
+            badminton: {
+                specialty: "羽球雙打選手",
+                teach: "yes",
+                interests: "我對運動員臨場的焦慮感控制非常有興趣。常看到同伴因緊張失常，我想了解如何用心理諮商幫助選手在關鍵時刻維持高水準發揮，以及怎麼引導學弟妹進行心理建設。",
+                activeTags: ["心理諮商與心智鍛鍊", "幼兒體適能與特殊體育"]
+            },
+            track: {
+                specialty: "田徑 (400公尺短跑與接力)",
+                teach: "no",
+                interests: "比起一輩子在田徑場當教練，我更喜歡辦理大型田徑賽事。我對運動行銷非常有興趣，尤其是社群影片剪輯、賽事視覺設計跟贊助廠商開發，希望能打造出媲美NBA氛圍的本土運動賽事。",
+                activeTags: ["行銷傳播與賽事主辦", "企業管理與商務開拓"]
+            },
+            swimming: {
+                specialty: "游泳 (200公尺蛙式)",
+                teach: "maybe",
+                interests: "我本身很容易關節拉傷，常常進出學校防護室。我對物理治療、骨骼肌肉與解剖學很有興趣。未來如果退役，想考取物理治療師、或是專精在水運動復健跟水療運動領域。",
+                activeTags: ["運動防護與防貼扎", "健康休閒與高齡養生"]
+            }
+        };
+
+        // Render interactive tags in Input Form
+        function renderTags() {
+            const container = document.getElementById('interest-tags-container');
+            container.innerHTML = '';
+            
+            tagsState.forEach((tag, index) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.onclick = () => toggleTag(index);
+                
+                // Toggle active style
+                if (tag.active) {
+                    btn.className = "text-xs px-3 py-1.5 rounded-full font-medium bg-blue-600 text-white border border-blue-500 shadow-md shadow-blue-500/10 transition-all flex items-center";
+                    btn.innerHTML = `
+                        <span class="mr-1">${tag.text}</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    `;
+                } else {
+                    btn.className = "text-xs px-3 py-1.5 rounded-full font-medium bg-slate-800 text-slate-300 hover:text-slate-100 hover:bg-slate-700 border border-slate-700 transition-all";
+                    btn.textContent = tag.text;
+                }
+                container.appendChild(btn);
+            });
+        }
+
+        // Toggling tag status and appending tag into text area if newly added
+        function toggleTag(index) {
+            tagsState[index].active = !tagsState[index].active;
+            renderTags();
+            
+            // Auto update interest text area gracefully
+            updateInterestTextAreaFromTags();
+        }
+
+        function updateInterestTextAreaFromTags() {
+            const activeTagsTexts = tagsState.filter(t => t.active).map(t => t.text);
+            const interestsArea = document.getElementById('interests');
+            let baseText = interestsArea.value;
+            
+            // Clean up old auto-tags in text to prevent duplicating
+            initialTags.forEach(tag => {
+                baseText = baseText.replace(new RegExp(`【${tag.text}】、?`, 'g'), '');
+            });
+            baseText = baseText.trim().replace(/、$/, '');
+
+            if (activeTagsTexts.length > 0) {
+                const tagsString = activeTagsTexts.map(t => `【${t}】`).join('、');
+                if (baseText) {
+                    interestsArea.value = tagsString + ' 並且我也對以下事物感興趣：' + baseText;
+                } else {
+                    interestsArea.value = tagsString;
+                }
+            } else {
+                interestsArea.value = baseText;
+            }
+        }
+
+        function setSpecialty(sport) {
+            document.getElementById('specialty').value = sport;
+        }
+
+        // Scenario Loader
+        function loadScenario(type) {
+            const data = scenarios[type];
+            if (!data) return;
+
+            document.getElementById('specialty').value = data.specialty;
+            
+            // Radio button selection
+            const radios = document.getElementsByName('teach_preference');
+            for (let radio of radios) {
+                if (radio.value === data.teach) {
+                    radio.checked = true;
+                }
+            }
+
+            // Set tags
+            tagsState = initialTags.map(tag => ({
+                ...tag,
+                active: data.activeTags.includes(tag.text)
+            }));
+            renderTags();
+
+            // Set interest description directly
+            document.getElementById('interests').value = data.interests;
+        }
+
+        // Custom alert controller
+        function showAlert(title, message) {
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            document.getElementById('custom-alert').classList.remove('hidden');
+        }
+
+        function closeAlert() {
+            document.getElementById('custom-alert').classList.add('hidden');
+        }
+
+        // Switch Tabs inside result panel
+        function switchTab(tabId) {
+            const tabs = ['majors', 'careers', 'portfolio'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-btn-${t}`);
+                const content = document.getElementById(`tab-content-${t}`);
+                
+                if (t === tabId) {
+                    btn.className = "flex-1 py-2.5 text-xs md:text-sm font-semibold rounded-lg text-center transition-all bg-blue-600 text-white shadow-md";
+                    content.classList.remove('hidden');
+                } else {
+                    btn.className = "flex-1 py-2.5 text-xs md:text-sm font-semibold rounded-lg text-center transition-all text-slate-400 hover:text-slate-200";
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        // Local Rule-Based Diagnostic Engine (Highly Professional Fallback)
+        function runLocalDiagnostic(specialty, teachPref, interests) {
+            // Build scores for major groups based on keyword parsing
+            const scores = {
+                pe_coach: 1, // 體育學系 / 運動教練學系
+                sports_med: 1, // 運動醫學 / 物理治療 / 運動防護系
+                sports_management: 1, // 運動休閒 / 事業管理系
+                sports_media: 1, // 運動傳播學系
+                sports_psychology: 1 // 諮商與運動心理學
+            };
+
+            const lowercaseInterests = interests.toLowerCase() + " " + specialty.toLowerCase();
+
+            // 1. Analyze Teach Preference
+            if (teachPref === "yes") {
+                scores.pe_coach += 5;
+            } else if (teachPref === "no") {
+                scores.pe_coach -= 2;
+                scores.sports_management += 2;
+                scores.sports_media += 2;
+            } else {
+                scores.pe_coach += 2; // Maybe
+            }
+
+            // 2. Keyword detection for Sports Medicine & PT
+            if (/防護|醫|復健|人體|解剖|受傷|關節|肌肉|物理治療|水療|骨骼/i.test(lowercaseInterests)) {
+                scores.sports_med += 8;
+            }
+            // 3. Keyword detection for Management & Marketing
+            if (/行銷|管理|辦賽|活動|贊助|商|企劃|經營|商業|開發|品牌/i.test(lowercaseInterests)) {
+                scores.sports_management += 8;
+            }
+            // 4. Keyword detection for Media & Communication
+            if (/播|傳播|影片|剪輯|社群|媒體|記者|採訪|視覺|設計/i.test(lowercaseInterests)) {
+                scores.sports_media += 8;
+            }
+            // 5. Keyword detection for Psychology & Counsel
+            if (/心|焦慮|緊張|輔導|諮商|心智|引導|抗壓|想法|陪伴/i.test(lowercaseInterests)) {
+                scores.sports_psychology += 8;
+            }
+
+            // Determine top recommendation categories
+            const sortedCategories = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+            const primaryCategory = sortedCategories[0][0];
+            const secondaryCategory = sortedCategories[1][0];
+
+            // Mapping result metadata
+            const majorDatabase = {
+                pe_coach: {
+                    name: "體育學系與運動競技學系",
+                    relevance: "高度關聯 (主專項延伸)",
+                    description: "此學系著重於探討運動科學、高素質專項訓練、教育學分學程（修畢可考體育教師）以及專業基層裁判/教練培訓。適合想精進個人競技水準，並有強烈技術傳承熱忱的學生。",
+                    why_match: `根據你的運動專項【${specialty}】與未來有意培育新生代的心志，此學系將為你建立最權威的運動教學與技術核心知能。`,
+                    representative_schools: ["國立臺灣體育運動大學", "國立體育大學", "國立臺灣師範大學", "北市大學體育系"]
+                },
+                sports_med: {
+                    name: "運動醫學與健康防護學系",
+                    relevance: "卓越防護與醫學跨領域",
+                    description: "跨足人體骨骼肌肉解剖、運動防護防貼扎、運動復健學、特殊體育與水中物理復健。此領域是目前職業運動隊伍與高齡養生產業極度欠缺的專業。",
+                    why_match: `你的專項運動在長年鍛鍊中勢必伴隨關節肌肉的挑戰，結合你對健康人體的濃厚興趣，能在未來精準為高強度選手及一般民眾做傷害防護與處方復健。`,
+                    representative_schools: ["高雄醫學大學運動醫學系", "中國醫藥大學運動醫學系", "國立體育大學運動保健學系"]
+                },
+                sports_management: {
+                    name: "運動事業管理與休閒學系",
+                    relevance: "商業營運與產業開拓",
+                    description: "核心課程結合行銷管理、體育活動籌辦、健身俱樂部經營、運動贊助案開發以及休閒運動規劃。旨在培育具備體育底蘊的現代經理人。",
+                    why_match: `你展現出對行銷管理與賽事主辦的強烈天份，將你的【${specialty}】運動思維轉化為高價值的體育商業活動，能大幅拓寬未來的職涯跑道。`,
+                    representative_schools: ["國立臺灣體育運動大學運動產業系", "真理大學運動管理學系", "國立體育大學體育推廣學系"]
+                },
+                sports_media: {
+                    name: "運動傳播與數位行銷學系",
+                    relevance: "數位影響力與社群企劃",
+                    description: "包含體育新聞採訪寫作、運動賽事轉播、社群影片剪輯與包裝、運動網紅與品牌經紀經營，是將運動賽場魅力透過多媒體傳遞給大眾的推手。",
+                    why_match: `將你的運動選手視角與對傳播、影片、社群媒體的敏銳度結合，你將能產出最道地、最具渲染力的體育媒體內容。`,
+                    representative_schools: ["國立臺灣體育運動大學運動傳播學系", "國立體育大學體育推廣系(傳播組)"]
+                },
+                sports_psychology: {
+                    name: "運動與諮商心理學系",
+                    relevance: "心智鍛鍊與選手職涯輔導",
+                    description: "此學門深度探討高壓力賽事下的心智機制，包含專注力鍛鍊、心智意象法、退役轉職焦慮與臨場壓力調控，是現代頂尖戰術分析中不不可或缺的核心。",
+                    why_match: `競技運動本身就是極高心智的對抗。你對心理輔導與壓力排解的細膩興趣，結合自身賽場經驗，能成為最了解選手內心創傷與突破瓶頸的頂尖心理師。`,
+                    representative_schools: ["國立臺灣體育運動大學運動心理學組", "大專院校諮商輔導學系兼修運動心理"]
+                }
+            };
+
+            const recommended_majors = [
+                majorDatabase[primaryCategory],
+                majorDatabase[secondaryCategory]
+            ];
+
+            // Local Career paths
+            const careerPathsDB = {
+                pe_coach: [
+                    { title: "中等學校體育教師 / 代理教師", description: "於國高中修讀教程後考取正式體育教職，穩定傳遞運動觀念與學養。" },
+                    { title: "運動中心/國家訓練中心教練", description: "為國家代表隊或各縣市專項運動班提供科學化的專項技術戰術訓練。" }
+                ],
+                sports_med: [
+                    { title: "運動傷害防護員 (ATC)", description: "進駐職業球隊、基層校隊或健身房，即時處理賽場傷害與協助長效康復。" },
+                    { title: "水療及體適能復健顧問", description: "為術後或高齡族群設計個人化的水陸兩棲復健處方。" }
+                ],
+                sports_management: [
+                    { title: "運動行銷總監 / 專案活動經理", description: "辦理如萬金石馬拉松、職業籃球季等大型賽事，負責招商與票務運作。" },
+                    { title: "運動連鎖品牌運營經理", description: "管理連鎖健身房、運動品牌代理或運動器材公司的跨國運作。" }
+                ],
+                sports_media: [
+                    { title: "體育主播 / 賽事文字記者", description: "於各大體育電視台、YouTube 頻道擔任現場即時播報或專題採訪。" },
+                    { title: "運動品牌社群影音創作者", description: "一手操辦知名選手或運動裝備的宣傳片、社群貼文與自媒體 IP。" }
+                ],
+                sports_psychology: [
+                    { title: "運動心智指導顧問 (Mental Coach)", description: "為職業電競、網球或高爾夫等高心智需求選手提供一對一臨場心智強化。" },
+                    { title: "企業壓力調控與心理諮商師", description: "考取心理師執照後，為高壓產業員工及退役選手提供生涯心理諮商服務。" }
+                ]
+            };
+
+            const career_paths = [
+                ...careerPathsDB[primaryCategory],
+                ...careerPathsDB[secondaryCategory]
+            ];
+
+            // Local Portfolio Advice generator
+            const portfolio_advice = [
+                `【自主學習計畫】建議設計「自主運動科學觀測」或「${interests.substring(0,10)}」相關專題，撰寫 3000 字探討研究。`,
+                `【課程學習成果】高一至高三體育課、自主訓練週記、或跨領域科目的整合心得（例如將物理學套用在你的【${specialty}】發力動作上）。`,
+                `【多元表現指標】完整呈現代表學校出賽的完整歷程。重點不要只放「贏了幾場球」，而是放「面臨挫敗、賽前受傷時你如何調試」並與你所感興趣的「${interests.substring(0,8)}」做連結！`,
+                `【百字心得自傳】在申請自傳中寫下：「我是一名【${specialty}】選手，然而我發現在賽場外，我對${interests.substring(0,12)}更有熱忱。我希望發揮運動員的恆毅力，在貴科系跨域成長...」`
+            ];
+
+            return {
+                overall_analysis: `你是一名出色的【${specialty}】體育選手。從你的興趣【${interests}】與教學傾向來看，你非常適合走向「跨域體育」升學模式。你既能保有賽場上的高抗壓性與技術底蘊，又能同時在學術領域中結合熱情，建立具有極高市場競爭力的第二技能！`,
+                recommended_majors,
+                career_paths,
+                portfolio_advice
+            };
+        }
+
+        // Exponential backoff runner for API requests (highly robust)
+        async function fetchWithRetry(url, options, maxRetries = 5) {
+            let delay = 1000;
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (error) {
+                    // Fail silently for console, retry after delay
+                }
+                if (i < maxRetries - 1) {
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; // 1s, 2s, 4s, 8s, 16s
+                }
+            }
+            throw new Error("API call failed after max retries");
+        }
+
+        // Main Diagnosis submission handler
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+
+            // Collect variables
+            const specialty = document.getElementById('specialty').value.trim();
+            const teachPreferenceRadio = document.querySelector('input[name="teach_preference"]:checked');
+            const teachPreference = teachPreferenceRadio ? teachPreferenceRadio.value : 'maybe';
+            const interests = document.getElementById('interests').value.trim();
+
+            if (!specialty || !interests) {
+                showAlert("資料未填寫完整", "請先填寫你的「運動專項」以及「特別感興趣的事物」，以利為你精準診斷。");
+                return;
+            }
+
+            // UI Transitions: Show loading state
+            document.getElementById('result-empty-state').classList.add('hidden');
+            document.getElementById('result-success-state').classList.add('hidden');
+            document.getElementById('result-loading-state').classList.remove('hidden');
+
+            // Set up interactive loading texts
+            let step = 1;
+            const step1 = document.getElementById('step-1');
+            const step2 = document.getElementById('step-2');
+            const step3 = document.getElementById('step-3');
+            const loadingTitle = document.getElementById('loading-title');
+            const loadingSubtitle = document.getElementById('loading-subtitle');
+
+            const loadingInterval = setInterval(() => {
+                if (step === 1) {
+                    loadingTitle.textContent = "正在拆解專項身體與心智密碼...";
+                    loadingSubtitle.textContent = `深度剖析【${specialty}】專屬力學與戰術優勢...`;
+                    step1.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-green-500 flex items-center justify-center text-[8px] text-white">✓</span><span class="text-green-400 font-semibold">專項優勢分析完成</span>`;
+                    step2.querySelector('span:first-child').className = "w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse";
+                    step2.querySelector('span:last-child').className = "text-slate-300";
+                    step = 2;
+                } else if (step === 2) {
+                    loadingTitle.textContent = "媒合大專院校多元跨域科系...";
+                    loadingSubtitle.textContent = "正在過濾體育生多元升學管道與教程機會...";
+                    step2.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-green-500 flex items-center justify-center text-[8px] text-white">✓</span><span class="text-green-400 font-semibold">跨域科系媒合成功</span>`;
+                    step3.querySelector('span:first-child').className = "w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse";
+                    step3.querySelector('span:last-child').className = "text-slate-300";
+                    step = 3;
+                } else {
+                    loadingTitle.textContent = "生成學習歷程與生涯規劃書...";
+                    loadingSubtitle.textContent = "編排高中生專屬升學自傳與自主學習計畫...";
+                    step3.innerHTML = `<span class="w-2.5 h-2.5 rounded-full bg-green-500 flex items-center justify-center text-[8px] text-white">✓</span><span class="text-green-400 font-semibold">學習規劃書編排完成</span>`;
+                    clearInterval(loadingInterval);
+                }
+            }, 1000);
+
+            // Setup prompt for AI
+            const systemPrompt = `你是一位台灣最資深的體育升學與職涯發展規劃專家。
+請針對高中體育專項學生，根據他們的專項運動、是否願意培育新生代（當教練或老師）、以及個人強烈感興趣的跨領域事物，提供具有深度、在地化且體貼的升學與職涯藍圖。
+你的回答必須是繁體中文，且完全符合下方所要求的 JSON 格式。請勿在 JSON 之外輸出任何其他閒聊與雜訊。`;
+
+            const userQuery = `【學生基本條件】
+1. 體育專項：${specialty}
+2. 教學/傳承新生代意願：${teachPreference === 'yes' ? '非常有意願想當教練或體育老師' : teachPreference === 'no' ? '沒有意願，想要完全跨界發展' : '還在猶豫中，希望保有彈性'}
+3. 特別感興趣的事物或技能：${interests}
+
+請根據上述條件，媒合 2 個最適合他的台灣大學科系（可以是純體育/運練系延伸、或是完全跨域結合運動醫學/傳播/管理學系等）。
+並給予他具體的高中學習歷程檔案（自主學習、多元表現、自傳心得）撰寫方針，以及 4 個未來的具體職涯方向。`;
+
+            const responseSchema = {
+                type: "OBJECT",
+                properties: {
+                    overall_analysis: { type: "STRING" },
+                    recommended_majors: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                name: { type: "STRING" },
+                                relevance: { type: "STRING" },
+                                description: { type: "STRING" },
+                                why_match: { type: "STRING" },
+                                representative_schools: {
+                                    type: "ARRAY",
+                                    items: { type: "STRING" }
+                                }
+                            },
+                            required: ["name", "relevance", "description", "why_match", "representative_schools"]
+                        }
+                    },
+                    career_paths: {
+                        type: "ARRAY",
+                        items: {
+                            type: "OBJECT",
+                            properties: {
+                                title: { type: "STRING" },
+                                description: { type: "STRING" }
+                            },
+                            required: ["title", "description"]
+                        }
+                    },
+                    portfolio_advice: {
+                        type: "ARRAY",
+                        items: { type: "STRING" }
+                    }
+                },
+                required: ["overall_analysis", "recommended_majors", "career_paths", "portfolio_advice"]
+            };
+
+            let diagnosticResults;
+            let isAiModel = false;
+
+            // Attempt AI Diagnostic via Gemini 2.5 Flash
+            if (apiKey !== "") {
+                try {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+                    const payload = {
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] },
+                        generationConfig: {
+                            responseMimeType: "application/json",
+                            responseSchema: responseSchema
+                        }
+                    };
+
+                    const result = await fetchWithRetry(url, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    }, 5);
+
+                    const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (textResponse) {
+                        diagnosticResults = JSON.parse(textResponse);
+                        isAiModel = true;
+                    }
+                } catch (error) {
+                    // Fallback to local diagnostics automatically if API fails
+                }
+            }
+
+            // Fallback to Local Rule Engine if AI failed or API Key is blank
+            if (!diagnosticResults) {
+                diagnosticResults = runLocalDiagnostic(specialty, teachPreference, interests);
+                isAiModel = false;
+            }
+
+            // Ensure loader finishes beautifully
+            setTimeout(() => {
+                clearInterval(loadingInterval);
+                displayResults(diagnosticResults, isAiModel, specialty);
+            }, 1200);
+        }
+
+        // Render Results to UI
+        function displayResults(data, isAiModel, specialty) {
+            // Update Headers and Badges
+            const badge = document.getElementById('result-badge');
+            if (isAiModel) {
+                badge.className = "absolute top-0 right-0 p-3 bg-cyan-500/15 rounded-bl-xl text-cyan-400 text-xs font-bold border-l border-b border-cyan-500/20";
+                badge.innerHTML = "✨ AI 智慧深度診斷";
+                document.getElementById('api-status-badge').innerHTML = `
+                    <span class="w-1.5 h-1.5 mr-1.5 rounded-full bg-cyan-400 animate-pulse"></span>
+                    AI 智慧診斷引擎運作中
+                `;
+            } else {
+                badge.className = "absolute top-0 right-0 p-3 bg-blue-500/10 rounded-bl-xl text-blue-400 text-xs font-semibold";
+                badge.innerHTML = "⚙️ 專業在地規則診斷";
+            }
+
+            document.getElementById('results-title-header').textContent = `${specialty} 專業升學暨職涯跨域推薦`;
+            document.getElementById('overall-analysis-text').textContent = data.overall_analysis;
+
+            // Render Tab 1: Recommended Majors
+            const majorsContainer = document.getElementById('tab-content-majors');
+            majorsContainer.innerHTML = '';
+            
+            data.recommended_majors.forEach((major, idx) => {
+                const majorCard = document.createElement('div');
+                majorCard.className = "bg-slate-900/70 border border-slate-800 p-5 rounded-2xl relative overflow-hidden group hover:border-slate-700/80 transition-all duration-300";
+                majorCard.innerHTML = `
+                    <div class="flex items-start justify-between mb-3">
+                        <div>
+                            <span class="inline-block px-2 py-0.5 rounded text-[10px] font-bold tracking-wider bg-blue-600/20 text-blue-400 uppercase mb-1">
+                                ${major.relevance}
+                            </span>
+                            <h4 class="text-base md:text-lg font-bold text-white group-hover:text-blue-400 transition-colors">
+                                ${idx + 1}. ${major.name}
+                            </h4>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        ${major.description}
+                    </p>
+                    <div class="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 mb-3">
+                        <span class="block text-[11px] font-bold text-slate-400 mb-1">💡 為什麼適合你？</span>
+                        <p class="text-xs text-slate-300 leading-relaxed">${major.why_match}</p>
+                    </div>
+                    <div>
+                        <span class="block text-[11px] font-bold text-slate-400 mb-1.5">🏫 台灣代表校系參考：</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            ${major.representative_schools.map(school => `
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700/50">
+                                    ${school}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                majorsContainer.appendChild(majorCard);
+            });
+
+            // Render Tab 2: Career Paths
+            const careersList = document.getElementById('careers-list');
+            careersList.innerHTML = '';
+            
+            data.career_paths.forEach((career, idx) => {
+                const careerItem = document.createElement('div');
+                careerItem.className = "flex items-start space-x-3.5 p-3.5 bg-slate-950/40 rounded-xl border border-slate-800/50 hover:bg-slate-950/80 transition-all";
+                careerItem.innerHTML = `
+                    <div class="w-8 h-8 rounded-lg bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center flex-shrink-0 text-sm font-black">
+                        0${idx + 1}
+                    </div>
+                    <div>
+                        <h5 class="text-sm font-semibold text-white">${career.title}</h5>
+                        <p class="text-xs text-slate-400 mt-1 leading-relaxed">${career.description}</p>
+                    </div>
+                `;
+                careersList.appendChild(careerItem);
+            });
+
+            // Render Tab 3: Portfolio Advice
+            const portfolioList = document.getElementById('portfolio-list');
+            portfolioList.innerHTML = '';
+            
+            data.portfolio_advice.forEach((advice, idx) => {
+                const adviceItem = document.createElement('div');
+                adviceItem.className = "p-3.5 bg-slate-950/40 rounded-xl border border-slate-800/50 flex items-start space-x-3";
+                adviceItem.innerHTML = `
+                    <svg class="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                    <p class="text-xs text-slate-300 leading-relaxed">${advice}</p>
+                `;
+                portfolioList.appendChild(adviceItem);
+            });
+
+            // Show success result box
+            document.getElementById('result-loading-state').classList.add('hidden');
+            document.getElementById('result-success-state').classList.remove('hidden');
+
+            // Reset navigation tab back to 'majors'
+            switchTab('majors');
+        }
+
+        // Initialize UI Elements on page load
+        window.onload = function() {
+            renderTags();
+        }
+    </script>
+</body>
+</html>
